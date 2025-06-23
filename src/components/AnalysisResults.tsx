@@ -19,8 +19,27 @@ import {
   GitBranch
 } from 'lucide-react';
 
+interface Repository {
+  name: string;
+  score: number;
+  purpose: string;
+  stars: number;
+}
+
+interface AnalysisData {
+  totalRepos: number;
+  categories: Record<string, string[]>;
+  techStack: Record<string, number>;
+  highIntegration: Repository[];
+  businessImpact: {
+    directRevenue: string;
+    integrationOpportunities: number;
+    consolidationTargets: number;
+  };
+}
+
 interface AnalysisResultsProps {
-  data: any;
+  data: AnalysisData;
   username: string;
 }
 
@@ -49,7 +68,7 @@ const AnalysisResults = ({ data, username }: AnalysisResultsProps) => {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-300">Total Repositories</p>
+                <p className="text-sm text-gray-300">Total Projects</p>
                 <p className="text-3xl font-bold text-white">{data.totalRepos}</p>
               </div>
               <GitBranch className="h-8 w-8 text-blue-400" />
@@ -118,9 +137,9 @@ const AnalysisResults = ({ data, username }: AnalysisResultsProps) => {
                   <div key={tech} className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="text-gray-200">{tech}</span>
-                      <span className="text-gray-300">{count} repos</span>
+                      <span className="text-gray-300">{count} projects</span>
                     </div>
-                    <Progress value={(count / data.totalRepos) * 100} className="h-2" />
+                    <Progress value={(Number(count) / data.totalRepos) * 100} className="h-2" />
                   </div>
                 ))}
               </CardContent>
@@ -160,8 +179,8 @@ const AnalysisResults = ({ data, username }: AnalysisResultsProps) => {
         <TabsContent value="categories" className="space-y-6">
           <div className="grid gap-6">
             {Object.entries(data.categories).map(([category, repos]) => {
-              const IconComponent = categoryIcons[category] || Globe;
-              const colorClass = categoryColors[category] || 'bg-gray-500';
+              const IconComponent = categoryIcons[category as keyof typeof categoryIcons] || Globe;
+              const colorClass = categoryColors[category as keyof typeof categoryColors] || 'bg-gray-500';
               
               return (
                 <Card key={category} className="bg-white/10 backdrop-blur-lg border-white/20">
@@ -171,7 +190,7 @@ const AnalysisResults = ({ data, username }: AnalysisResultsProps) => {
                         <IconComponent className="h-5 w-5 text-white" />
                       </div>
                       {category.replace('_', ' ').toUpperCase()}
-                      <Badge variant="secondary">{repos.length} repos</Badge>
+                      <Badge variant="secondary">{repos.length} projects</Badge>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
@@ -344,7 +363,7 @@ const AnalysisResults = ({ data, username }: AnalysisResultsProps) => {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `github-analysis-${username}.json`;
+            a.download = `portfolio-analysis-${username}.json`;
             a.click();
           }}
         >
