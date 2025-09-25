@@ -9,6 +9,8 @@ import { Github, BarChart3, Zap, Target, Rocket, TrendingUp, ArrowLeft, Cloud, U
 import { useToast } from "@/hooks/use-toast";
 import AnalysisResults from '@/components/AnalysisResults';
 import LoadingAnimation from '@/components/LoadingAnimation';
+import TopDevelopers from '@/components/TopDevelopers';
+import DeepDriveAnalOptions from '@/components/DeepDriveAnalOptions';
 
 const Index = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -188,11 +190,11 @@ const Index = () => {
   };
 
   const handleGoogleDriveConnect = () => handleStorageConnect('Google Drive');
-  const handleDropboxConnect = () => handleStorageConnect('Dropbox');
+  const handleOneDriveConnect = () => handleStorageConnect('Microsoft OneDrive');
   const handleFileUpload = () => {
     toast({
-      title: "File Upload",
-      description: "Direct file upload feature coming soon!",
+      title: "DeepDriveAnal Upload",
+      description: "Raw folder upload feature coming soon! 🔥",
     });
   };
 
@@ -211,47 +213,59 @@ const Index = () => {
               <Github className="h-12 w-12 text-white" />
             </div>
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-4">
-            Project Portfolio Analyzer
+          <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent mb-4">
+            GitAnal
           </h1>
-          <p className="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
-            Analyze your GitHub repositories or project directories for strategic business insights. 
-            Discover integration opportunities and revenue potential across your entire portfolio.
+          <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-2">
+            🔍 <strong>Penetrating deep into your repositories</strong> to expose hidden business potential
           </p>
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-8">
+            From bleeding-edge tech stacks to strategic integration insights, GitAnal analyzes it all with surgical precision
+          </p>
+
+          {/* Top Developers Section */}
+          {!showAnalysisOptions && !analysisData && !isAnalyzing && (
+            <TopDevelopers />
+          )}
 
           {/* Analysis Options */}
           {!showAnalysisOptions && !analysisData && !isAnalyzing && (
-            <div className="max-w-4xl mx-auto space-y-6">
-              <Alert className="bg-blue-500/10 border-blue-500/20 text-blue-200">
+            <div className="max-w-6xl mx-auto space-y-8">
+              <Alert className="bg-purple-500/10 border-purple-500/20 text-purple-200">
                 <Shield className="h-4 w-4" />
                 <AlertDescription>
-                  🔒 <strong>Privacy First:</strong> All analysis happens in your browser. 
-                  No credentials are stored, and no data is uploaded to our servers.
+                  🔒 <strong>GitAnal Privacy Promise:</strong> All deep analysis happens locally in your browser. 
+                  No repo secrets leave your machine, no tokens stored on our servers. Maximum penetration, maximum privacy.
                 </AlertDescription>
               </Alert>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {/* GitHub Analysis */}
-                <Card className="bg-white/10 backdrop-blur-lg border-white/20">
+              {/* GitHub Section */}
+              <div className="space-y-6">
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-white mb-2">🔍 Repository Deep Dive</h3>
+                  <p className="text-gray-300">Penetrate your GitHub profile to extract maximum intelligence</p>
+                </div>
+                
+                <Card className="bg-white/10 backdrop-blur-lg border-white/20 max-w-md mx-auto">
                   <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-3 p-3 bg-gray-700/30 rounded-full w-fit">
-                      <Github className="h-6 w-6 text-gray-100" />
+                    <div className="mx-auto mb-3 p-3 bg-purple-500/20 rounded-full w-fit">
+                      <Github className="h-6 w-6 text-purple-300" />
                     </div>
-                    <CardTitle className="text-white text-lg">GitHub Analysis</CardTitle>
+                    <CardTitle className="text-white text-xl">GitAnal Deep Scan</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
+                  <CardContent className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="username" className="text-gray-200 text-sm">Username</Label>
+                      <Label htmlFor="username" className="text-gray-200 text-sm">GitHub Username</Label>
                       <Input
                         id="username"
                         value={githubUsername}
                         onChange={(e) => setGithubUsername(e.target.value)}
-                        placeholder="your-username"
+                        placeholder="your-dev-handle"
                         className="bg-white/5 border-white/20 text-white placeholder:text-gray-400"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="token" className="text-gray-200 text-sm">Personal Token</Label>
+                      <Label htmlFor="token" className="text-gray-200 text-sm">Personal Access Token</Label>
                       <Input
                         id="token"
                         type="password"
@@ -263,84 +277,22 @@ const Index = () => {
                     </div>
                     <Button 
                       onClick={handleGitHubAnalysis}
-                      className="w-full bg-gray-700 hover:bg-gray-600 text-white font-medium border-0"
+                      className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-medium border-0"
                     >
                       <Github className="h-4 w-4 mr-2" />
-                      Analyze GitHub
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                {/* Google Drive */}
-                <Card className="bg-white/10 backdrop-blur-lg border-white/20">
-                  <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-3 p-3 bg-blue-500/20 rounded-full w-fit">
-                      <svg className="h-6 w-6 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M6.28 3l5.72 9.92L18.28 3H6.28zM21 14.33L18.28 9H9.44L12.16 14.33H21zM3 14.33L8.72 21h9.84L12.28 14.33H3z"/>
-                      </svg>
-                    </div>
-                    <CardTitle className="text-white text-lg">Google Drive</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-gray-300 text-sm mb-4">
-                      Connect to your Google Drive folder containing projects
-                    </p>
-                    <Button 
-                      onClick={handleGoogleDriveConnect}
-                      className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium border-0"
-                    >
-                      <Cloud className="h-4 w-4 mr-2" />
-                      Connect Drive
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                {/* Dropbox */}
-                <Card className="bg-white/10 backdrop-blur-lg border-white/20">
-                  <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-3 p-3 bg-blue-600/20 rounded-full w-fit">
-                      <svg className="h-6 w-6 text-blue-300" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 21l-8-6.5 4-3.5-4-3.5L12 1l8 6.5-4 3.5 4 3.5L12 21z"/>
-                      </svg>
-                    </div>
-                    <CardTitle className="text-white text-lg">Dropbox</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-gray-300 text-sm mb-4">
-                      Access your Dropbox folder with project files
-                    </p>
-                    <Button 
-                      onClick={handleDropboxConnect}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium border-0"
-                    >
-                      <Cloud className="h-4 w-4 mr-2" />
-                      Connect Dropbox
-                    </Button>
-                  </CardContent>
-                </Card>
-
-                {/* Direct Upload */}
-                <Card className="bg-white/10 backdrop-blur-lg border-white/20">
-                  <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-3 p-3 bg-purple-500/20 rounded-full w-fit">
-                      <Upload className="h-6 w-6 text-purple-400" />
-                    </div>
-                    <CardTitle className="text-white text-lg">Direct Upload</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-center">
-                    <p className="text-gray-300 text-sm mb-4">
-                      Upload project folders directly from your computer
-                    </p>
-                    <Button 
-                      onClick={handleFileUpload}
-                      className="w-full bg-purple-500 hover:bg-purple-600 text-white font-medium border-0"
-                    >
-                      <Folder className="h-4 w-4 mr-2" />
-                      Upload Folders
+                      Start Deep Analysis 🔥
                     </Button>
                   </CardContent>
                 </Card>
               </div>
+
+              {/* DeepDriveAnal Section */}
+              <DeepDriveAnalOptions 
+                onGoogleDriveConnect={handleGoogleDriveConnect}
+                onOneDriveConnect={handleOneDriveConnect}
+                onFileUpload={handleFileUpload}
+                isConnecting={isAnalyzing}
+              />
             </div>
           )}
         </div>
@@ -370,35 +322,35 @@ const Index = () => {
         {/* Features Section - Only show when not analyzing */}
         {!showAnalysisOptions && !analysisData && !isAnalyzing && (
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center">
+            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center hover:border-purple-400/30 transition-all duration-300">
               <CardContent className="pt-6">
                 <Target className="h-8 w-8 text-purple-400 mx-auto mb-3" />
-                <h3 className="text-white font-semibold mb-2">Purpose Detection</h3>
-                <p className="text-gray-300 text-sm">Automatically categorize projects by business purpose and functionality</p>
+                <h3 className="text-white font-semibold mb-2">Purpose Penetration</h3>
+                <p className="text-gray-300 text-sm">Drill deep into project DNA to expose true business purposes and hidden functionality patterns</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center">
+            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center hover:border-yellow-400/30 transition-all duration-300">
               <CardContent className="pt-6">
                 <Zap className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-white font-semibold mb-2">Integration Analysis</h3>
-                <p className="text-gray-300 text-sm">Identify projects with high integration potential and synergy opportunities</p>
+                <h3 className="text-white font-semibold mb-2">Integration Intel</h3>
+                <p className="text-gray-300 text-sm">Expose high-synergy opportunities and architectural integration points across your dev ecosystem</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center">
+            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center hover:border-green-400/30 transition-all duration-300">
               <CardContent className="pt-6">
                 <TrendingUp className="h-8 w-8 text-green-400 mx-auto mb-3" />
-                <h3 className="text-white font-semibold mb-2">Revenue Insights</h3>
-                <p className="text-gray-300 text-sm">Discover monetization opportunities and business value across your portfolio</p>
+                <h3 className="text-white font-semibold mb-2">Revenue Extraction</h3>
+                <p className="text-gray-300 text-sm">Uncover hidden monetization vectors and extract maximum business value from your code assets</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center">
+            <Card className="bg-white/10 backdrop-blur-lg border-white/20 text-center hover:border-pink-400/30 transition-all duration-300">
               <CardContent className="pt-6">
                 <Rocket className="h-8 w-8 text-pink-400 mx-auto mb-3" />
-                <h3 className="text-white font-semibold mb-2">Strategic Roadmap</h3>
-                <p className="text-gray-300 text-sm">Get actionable recommendations for consolidation and platform development</p>
+                <h3 className="text-white font-semibold mb-2">Strategic Domination</h3>
+                <p className="text-gray-300 text-sm">Deploy surgical recommendations for portfolio consolidation and platform supremacy</p>
               </CardContent>
             </Card>
           </div>
